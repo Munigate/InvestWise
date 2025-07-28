@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 interface FooterProps {
@@ -7,11 +8,11 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ isDark }) => {
   const navLinks = [
-    { name: 'Home', href: '#' },
-    { name: 'About', href: '#' },
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Features', href: '/features' },
+    { name: 'Contact', href: '/contact' },
     { name: 'Blog', href: '#' },
-    { name: 'Terms', href: '#' },
-    { name: 'Privacy', href: '#' }
   ];
 
   const socialLinks = [
@@ -61,18 +62,55 @@ const Footer: React.FC<FooterProps> = ({ isDark }) => {
             <ul className="space-y-2">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
+                  {link.href.startsWith('/') ? (
+                    <Link
+                      to={link.href}
+                      className={`transition-colors duration-300 ${
+                        isDark 
+                          ? 'text-gray-400 hover:text-blue-400' 
+                          : 'text-gray-600 hover:text-blue-600'
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className={`transition-colors duration-300 ${
+                        isDark 
+                          ? 'text-gray-400 hover:text-blue-400' 
+                          : 'text-gray-600 hover:text-blue-600'
+                      }`}
+                    >
+                      {link.name}
+                    </a>
+                  )}
+                </li>
+              ))}
+              <li>
+                <a
+                  href="#"
+                  className={`transition-colors duration-300 ${
+                    isDark 
+                      ? 'text-gray-400 hover:text-blue-400' 
+                      : 'text-gray-600 hover:text-blue-600'
+                  }`}
+                >
+                  Terms
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
                     className={`transition-colors duration-300 ${
                       isDark 
                         ? 'text-gray-400 hover:text-blue-400' 
                         : 'text-gray-600 hover:text-blue-600'
                     }`}
                   >
-                    {link.name}
+                  Privacy
                   </a>
-                </li>
-              ))}
+              </li>
             </ul>
           </div>
 

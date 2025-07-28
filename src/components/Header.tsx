@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 
 interface HeaderProps {
@@ -8,6 +9,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -20,32 +22,40 @@ const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <Link to="/" className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
             <span className="text-blue-600">Invest</span>Wise
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className={`font-medium transition-colors duration-300 ${
-              isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+            <Link to="/" className={`font-medium transition-colors duration-300 ${
+              location.pathname === '/' 
+                ? 'text-blue-600' 
+                : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
             }`}>
               Home
-            </a>
-            <a href="#" className={`font-medium transition-colors duration-300 ${
-              isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+            </Link>
+            <Link to="/about" className={`font-medium transition-colors duration-300 ${
+              location.pathname === '/about' 
+                ? 'text-blue-600' 
+                : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
             }`}>
               About
-            </a>
-            <a href="#" className={`font-medium transition-colors duration-300 ${
-              isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+            </Link>
+            <Link to="/features" className={`font-medium transition-colors duration-300 ${
+              location.pathname === '/features' 
+                ? 'text-blue-600' 
+                : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
             }`}>
               Features
-            </a>
-            <a href="#" className={`font-medium transition-colors duration-300 ${
-              isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+            </Link>
+            <Link to="/contact" className={`font-medium transition-colors duration-300 ${
+              location.pathname === '/contact' 
+                ? 'text-blue-600' 
+                : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
             }`}>
               Contact
-            </a>
+            </Link>
           </nav>
 
           {/* Right side buttons */}
@@ -85,26 +95,34 @@ const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
         {isMenuOpen && (
           <nav className={`md:hidden mt-4 pt-4 border-t ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
             <div className="flex flex-col space-y-4">
-              <a href="#" className={`font-medium transition-colors duration-300 ${
-                isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+              <Link to="/" onClick={toggleMenu} className={`font-medium transition-colors duration-300 ${
+                location.pathname === '/' 
+                  ? 'text-blue-600' 
+                  : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
               }`}>
                 Home
-              </a>
-              <a href="#" className={`font-medium transition-colors duration-300 ${
-                isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+              </Link>
+              <Link to="/about" onClick={toggleMenu} className={`font-medium transition-colors duration-300 ${
+                location.pathname === '/about' 
+                  ? 'text-blue-600' 
+                  : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
               }`}>
                 About
-              </a>
-              <a href="#" className={`font-medium transition-colors duration-300 ${
-                isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+              </Link>
+              <Link to="/features" onClick={toggleMenu} className={`font-medium transition-colors duration-300 ${
+                location.pathname === '/features' 
+                  ? 'text-blue-600' 
+                  : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
               }`}>
                 Features
-              </a>
-              <a href="#" className={`font-medium transition-colors duration-300 ${
-                isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+              </Link>
+              <Link to="/contact" onClick={toggleMenu} className={`font-medium transition-colors duration-300 ${
+                location.pathname === '/contact' 
+                  ? 'text-blue-600' 
+                  : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
               }`}>
                 Contact
-              </a>
+              </Link>
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-semibold transition-colors duration-300 self-start">
                 Get Started
               </button>
