@@ -10,13 +10,13 @@ const Features: React.FC<FeaturesProps> = ({ isDark }) => {
     {
       icon: BookOpen,
       emoji: '🌱',
-      title: 'Learn the Stock Market (Step-by-Step)',
-      description: 'Understand how the stock market works through simple lessons, visuals, and real-life examples. No jargon, just plain English.'
+      title: 'Learn the Equity Market (Step-by-Step)',
+      description: 'Understand how the Equity market works through simple lessons, visuals, and real-life examples. No jargon, just plain English.'
     },
     {
       icon: TrendingUp,
       emoji: '📈',
-      title: 'Personalized Stock Suggestions',
+      title: 'Personalized Suggestions',
       description: 'We analyze your income, expenses, and financial goals to recommend stocks that suit your long-term plans. It\'s like having your own financial guide.'
     },
     {
