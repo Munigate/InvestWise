@@ -98,17 +98,6 @@ const Testimonials: React.FC<TestimonialsProps> = ({ isDark }) => {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(calc(-400px * 5));
-          }
-        }
-      `}</style>
     </section>
   );
 };
