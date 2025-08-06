@@ -1,6 +1,25 @@
 import React, { useState } from 'react';
 import { Database, TrendingUp, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface StockDetailsProps {
   isDark: boolean;
@@ -46,6 +65,125 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
       setLoading(false);
     }
   };
+
+  const processChartData = () => {
+    if (stockData.length === 0) return null;
+
+    // Get unique dates and sort them
+    const uniqueDates = [...new Set(stockData.map(item => item.currentdate))]
+      .filter(date => date)
+      .sort((a, b) => new Date(a!).getTime() - new Date(b!).getTime());
+
+    // Get unique equity categories
+    const uniqueCategories = [...new Set(stockData.map(item => item.equitycategory))]
+      .filter(category => category);
+
+    // Generate colors for each category
+    const colors = [
+      'rgba(59, 130, 246, 0.8)', // Blue
+      'rgba(16, 185, 129, 0.8)', // Green
+      'rgba(245, 101, 101, 0.8)', // Red
+      'rgba(139, 92, 246, 0.8)', // Purple
+      'rgba(245, 158, 11, 0.8)', // Yellow
+      'rgba(236, 72, 153, 0.8)', // Pink
+      'rgba(14, 165, 233, 0.8)', // Sky
+      'rgba(34, 197, 94, 0.8)', // Emerald
+    ];
+
+    const datasets = uniqueCategories.map((category, index) => {
+      const categoryData = uniqueDates.map(date => {
+        const item = stockData.find(
+          stock => stock.currentdate === date && stock.equitycategory === category
+        );
+        return item?.pevalue || 0;
+      });
+
+      return {
+        label: category || 'Unknown',
+        data: categoryData,
+        backgroundColor: colors[index % colors.length],
+        borderColor: colors[index % colors.length].replace('0.8', '1'),
+        borderWidth: 1,
+      };
+    });
+
+    return {
+      labels: uniqueDates.map(date => formatDate(date)),
+      datasets,
+    };
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+        labels: {
+          color: isDark ? '#D1D5DB' : '#374151',
+          font: {
+            size: 12,
+          },
+        },
+      },
+      title: {
+        display: true,
+        text: 'PE Values by Equity Category Over Time',
+        color: isDark ? '#FFFFFF' : '#111827',
+        font: {
+          size: 16,
+          weight: 'bold' as const,
+        },
+      },
+      tooltip: {
+        backgroundColor: isDark ? '#374151' : '#FFFFFF',
+        titleColor: isDark ? '#FFFFFF' : '#111827',
+        bodyColor: isDark ? '#D1D5DB' : '#374151',
+        borderColor: isDark ? '#6B7280' : '#D1D5DB',
+        borderWidth: 1,
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Date',
+          color: isDark ? '#D1D5DB' : '#374151',
+          font: {
+            size: 14,
+            weight: 'bold' as const,
+          },
+        },
+        ticks: {
+          color: isDark ? '#9CA3AF' : '#6B7280',
+          maxRotation: 45,
+        },
+        grid: {
+          color: isDark ? '#374151' : '#E5E7EB',
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'PE Value',
+          color: isDark ? '#D1D5DB' : '#374151',
+          font: {
+            size: 14,
+            weight: 'bold' as const,
+          },
+        },
+        ticks: {
+          color: isDark ? '#9CA3AF' : '#6B7280',
+        },
+        grid: {
+          color: isDark ? '#374151' : '#E5E7EB',
+        },
+        beginAtZero: true,
+      },
+    },
+  };
+
+  const chartData = processChartData();
 
   const formatCurrency = (value: number | null | undefined) => {
     if (value === null || value === undefined) return 'N/A';
@@ -131,6 +269,25 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
               <CheckCircle className="w-5 h-5" />
               <span className="font-semibold">Success:</span>
               Stock details fetched successfully! Found {stockData.length} records.
+            </div>
+          </div>
+        )}
+
+        {/* Chart Section */}
+        {stockData.length > 0 && chartData && (
+          <div className={`mb-8 rounded-2xl overflow-hidden ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200 shadow-xl'}`}>
+            <div className={`px-6 py-4 border-b ${isDark ? 'border-gray-700 bg-gray-750' : 'border-gray-200 bg-gray-50'}`}>
+              <div className="flex items-center gap-3">
+                <TrendingUp className={`w-6 h-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  PE Values Chart
+                </h2>
+              </div>
+            </div>
+            <div className="p-6">
+              <div style={{ height: '400px' }}>
+                <Bar data={chartData} options={chartOptions} />
+              </div>
             </div>
           </div>
         )}
