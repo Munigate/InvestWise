@@ -6,7 +6,7 @@ interface StockDetailsProps {
   isDark: boolean;
 }
 
-interface EquityShareDetails {
+interface EquityShareDetail {
   id?: number;
   company_name?: string;
   symbol?: string;
