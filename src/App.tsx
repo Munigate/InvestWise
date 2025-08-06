@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import AboutUs from './pages/AboutUs';
 import Features from './pages/Features';
 import Contact from './pages/Contact';
+import StockDetails from './pages/StockDetails';
 
 function App() {
   const [isDark, setIsDark] = useState(true); // Default to dark theme
@@ -44,6 +45,7 @@ function App() {
           <Route path="/about" element={<AboutUs isDark={isDark} />} />
           <Route path="/features" element={<Features isDark={isDark} />} />
           <Route path="/contact" element={<Contact isDark={isDark} />} />
+          <Route path="/stock-details" element={<StockDetails isDark={isDark} />} />
         </Routes>
         <Footer isDark={isDark} />
       </div>
