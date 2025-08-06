@@ -33,8 +33,7 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
     try {
       const { data, error } = await supabase
         .from('equitysharedetails')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*');
 
       if (error) {
         throw error;
