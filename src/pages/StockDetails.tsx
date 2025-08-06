@@ -7,15 +7,10 @@ interface StockDetailsProps {
 }
 
 interface EquityShareDetail {
-  id?: number;
-  company_name?: string;
-  symbol?: string;
-  current_price?: number;
-  market_cap?: number;
-  pe_ratio?: number;
-  dividend_yield?: number;
-  sector?: string;
-  created_at?: string;
+  currentdate?: string;
+  equitycategory?: string;
+  pevalue?: number;
+  indexvalue?: number;
   [key: string]: any; // For any additional columns
 }
 
@@ -33,7 +28,7 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
     try {
       const { data, error } = await supabase
         .from('equitysharedetails')
-        .select('*');
+        .select('currentdate, equitycategory, pevalue, indexvalue');
 
       if (error) {
         throw error;
@@ -55,8 +50,6 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
   const formatCurrency = (value: number | null | undefined) => {
     if (value === null || value === undefined) return 'N/A';
     return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
       minimumFractionDigits: 2,
     }).format(value);
   };
@@ -66,9 +59,13 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
     return new Intl.NumberFormat('en-IN').format(value);
   };
 
-  const formatPercentage = (value: number | null | undefined) => {
+  const formatDate = (value: string | null | undefined) => {
     if (value === null || value === undefined) return 'N/A';
-    return `${value.toFixed(2)}%`;
+    try {
+      return new Date(value).toLocaleDateString('en-IN');
+    } catch {
+      return value;
+    }
   };
 
   return (
@@ -155,32 +152,23 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
                 <thead className={`${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
                   <tr>
                     <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Company
+                      Date
                     </th>
                     <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Symbol
+                      Equity Category
                     </th>
                     <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Current Price
+                      PE Value
                     </th>
                     <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Market Cap
-                    </th>
-                    <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      P/E Ratio
-                    </th>
-                    <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Dividend Yield
-                    </th>
-                    <th className={`px-6 py-4 text-left text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Sector
+                      Index Value
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {stockData.map((stock, index) => (
                     <tr
-                      key={stock.id || index}
+                      key={index}
                       className={`border-b transition-colors duration-200 ${
                         isDark 
                           ? 'border-gray-700 hover:bg-gray-750' 
@@ -189,34 +177,25 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
                     >
                       <td className={`px-6 py-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         <div className="font-semibold">
-                          {stock.company_name || 'N/A'}
+                          {formatDate(stock.currentdate)}
                         </div>
                       </td>
                       <td className={`px-6 py-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                        <div className="font-mono font-semibold">
-                          {stock.symbol || 'N/A'}
-                        </div>
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          isDark ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-700'
+                        }`}>
+                          {stock.equitycategory || 'N/A'}
+                        </span>
                       </td>
                       <td className={`px-6 py-4 ${isDark ? 'text-green-400' : 'text-green-600'}`}>
                         <div className="font-semibold">
-                          {formatCurrency(stock.current_price)}
+                          {formatNumber(stock.pevalue)}
                         </div>
                       </td>
-                      <td className={`px-6 py-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {formatNumber(stock.market_cap)}
-                      </td>
-                      <td className={`px-6 py-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {stock.pe_ratio ? stock.pe_ratio.toFixed(2) : 'N/A'}
-                      </td>
                       <td className={`px-6 py-4 ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>
-                        {formatPercentage(stock.dividend_yield)}
-                      </td>
-                      <td className={`px-6 py-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
-                        }`}>
-                          {stock.sector || 'N/A'}
-                        </span>
+                        <div className="font-semibold">
+                          {formatNumber(stock.indexvalue)}
+                        </div>
                       </td>
                     </tr>
                   ))}
