@@ -63,6 +63,13 @@ const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
             }`}>
               Stock Details
             </Link>
+            <Link to="/stock-details" className={`font-medium transition-colors duration-300 ${
+              location.pathname === '/stock-details' 
+                ? 'text-blue-600' 
+                : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+            }`}>
+              Stock Details
+            </Link>
           </nav>
 
           {/* Right side buttons */}
@@ -129,6 +136,13 @@ const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
                   : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
               }`}>
                 Contact
+              </Link>
+              <Link to="/stock-details" onClick={toggleMenu} className={`font-medium transition-colors duration-300 ${
+                location.pathname === '/stock-details' 
+                  ? 'text-blue-600' 
+                  : isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'
+              }`}>
+                Stock Details
               </Link>
               <Link to="/stock-details" onClick={toggleMenu} className={`font-medium transition-colors duration-300 ${
                 location.pathname === '/stock-details' 
