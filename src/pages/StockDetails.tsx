@@ -197,6 +197,8 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
             weight: 'bold' as const,
           },
         },
+        barPercentage: 0.6,
+        categoryPercentage: 0.8,
         ticks: {
           color: isDark ? '#9CA3AF' : '#6B7280',
           maxRotation: 45,
