@@ -39,6 +39,28 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  // Helper functions - moved before they are used
+  const formatCurrency = (value: number | null | undefined) => {
+    if (value === null || value === undefined) return 'N/A';
+    return new Intl.NumberFormat('en-IN', {
+      minimumFractionDigits: 2,
+    }).format(value);
+  };
+
+  const formatNumber = (value: number | null | undefined) => {
+    if (value === null || value === undefined) return 'N/A';
+    return new Intl.NumberFormat('en-IN').format(value);
+  };
+
+  const formatDate = (value: string | null | undefined) => {
+    if (value === null || value === undefined) return 'N/A';
+    try {
+      return new Date(value).toLocaleDateString('en-IN');
+    } catch {
+      return value;
+    }
+  };
+
   const fetchStockDetails = async () => {
     setLoading(true);
     setError(null);
@@ -184,27 +206,6 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
   };
 
   const chartData = processChartData();
-
-  const formatCurrency = (value: number | null | undefined) => {
-    if (value === null || value === undefined) return 'N/A';
-    return new Intl.NumberFormat('en-IN', {
-      minimumFractionDigits: 2,
-    }).format(value);
-  };
-
-  const formatNumber = (value: number | null | undefined) => {
-    if (value === null || value === undefined) return 'N/A';
-    return new Intl.NumberFormat('en-IN').format(value);
-  };
-
-  const formatDate = (value: string | null | undefined) => {
-    if (value === null || value === undefined) return 'N/A';
-    try {
-      return new Date(value).toLocaleDateString('en-IN');
-    } catch {
-      return value;
-    }
-  };
 
   return (
     <div className={`min-h-screen pt-20 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
