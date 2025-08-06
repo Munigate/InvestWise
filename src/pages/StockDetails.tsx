@@ -129,6 +129,23 @@ const StockDetails: React.FC<StockDetailsProps> = ({ isDark }) => {
       };
     });
 
+    // Add PE value dotted line
+    const peValueLineData = uniqueDates.map(date => {
+      const item = stockData.find(stock => stock.currentdate === date);
+      return item?.pevalue || 0;
+    });
+
+    datasets.push({
+      type: 'line' as const,
+      label: 'PE Value Line',
+      data: peValueLineData,
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 2,
+      borderDash: [5, 5],
+      pointRadius: 0,
+      fill: false,
+      tension: 0,
+    });
     return {
       labels: uniqueDates.map(date => formatDate(date)),
       datasets,
